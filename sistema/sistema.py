@@ -91,19 +91,19 @@ class Sistema:
             sistema_adm = Sistema_Adm(self._loja)
             sistema_adm.run()
             
-    def verifica_op_login(self, op) -> bool:
+    def verifica_op_login(self, op: int) -> bool:
         while op > 4 or op < 1:
             print('*OPERAÇÃO  INEXISTENTE*')
             return False
         return True
 
-    def verifica_login_usuario_cpf(self, cpf) -> bool:
+    def verifica_login_usuario_cpf(self, cpf: str) -> bool:
         for usuario in self._loja.get_usuarios():
             if usuario.get_cpf() == cpf:
                 return True
         return False
 
-    def verifica_login_usuario_senha(self, senha) -> Tuple[bool, Usuario] | Tuple[bool, None]:
+    def verifica_login_usuario_senha(self, senha: str) -> Tuple[bool, Usuario] | Tuple[bool, None]:
         for usuario in self._loja.get_usuarios():
             if usuario.get_senha() == senha:
                 return True, usuario
