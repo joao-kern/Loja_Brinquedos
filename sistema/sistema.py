@@ -1,22 +1,23 @@
-from loja import Loja
-from usuario import Usuario
-from sistema_adm import Sistema_Adm
-from sistema_cliente import Sistema_Cliente
+from typing import List, Callable, Tuple
+from sistema.loja import Loja
+from sistema.usuario import Usuario
+from sistema.sistema_adm import Sistema_Adm
+from sistema.sistema_cliente import Sistema_Cliente
 
 class Sistema:
-    def __init__(self):
-        self._loja = Loja()
-        self._adm_usuario = "adm"
-        self._adm_senha = "Administrador@2761"
-        self._execucao = False
-        self._operacoes = [
+    def __init__(self)-> None:
+        self._loja: Loja = Loja()
+        self._adm_usuario: str = "adm"
+        self._adm_senha: str = "Administrador@2761"
+        self._execucao: bool = False
+        self._operacoes: List[Callable] = [
             self.criar_conta,
             self.login_conta,
             self.login_adm,
             self.finalizar_programa
         ]
 
-    def run(self):
+    def run(self) -> None:
         self._execucao = True
         while self._execucao: 
             print('Menu de Ações')
@@ -29,7 +30,7 @@ class Sistema:
             self._operacoes[op - 1]()
             print()
 
-    def criar_conta(self):
+    def criar_conta(self) -> None:
         print('Criar Conta')
         print()
         validacao_cpf = False
@@ -59,7 +60,7 @@ class Sistema:
         print('Conta criada com sucesso')
         print()
             
-    def login_conta(self):
+    def login_conta(self) -> None:
         print('Login Conta - Cliente')
         print()
         cpf = self.input_str('CPF (XXX.XXX.XXX-XX): ')
@@ -68,7 +69,7 @@ class Sistema:
         login_senha, usuario = self.verifica_login_usuario_senha(senha)
         if not login_cpf:
             print("CPF Incorreto")
-        if not login_senha:
+        elif not login_senha:
             print("Senha incorreta")
         else:
             print()
@@ -77,7 +78,7 @@ class Sistema:
             sistema_cliente = Sistema_Cliente(self._loja, usuario)
             sistema_cliente.run()
             
-    def login_adm(self):
+    def login_adm(self) -> None:
         print('Login Conta - Administrador')
         print()
         usuario = self.input_str('Usuário: ')
@@ -90,52 +91,49 @@ class Sistema:
             sistema_adm = Sistema_Adm(self._loja)
             sistema_adm.run()
             
-    def verifica_op_login(self, op):
+    def verifica_op_login(self, op) -> bool:
         while op > 4 or op < 1:
             print('*OPERAÇÃO  INEXISTENTE*')
             return False
         return True
 
-    def verifica_login_usuario_cpf(self, cpf):
+    def verifica_login_usuario_cpf(self, cpf) -> bool:
         for usuario in self._loja.get_usuarios():
             if usuario.get_cpf() == cpf:
                 return True
         return False
 
-    def verifica_login_usuario_senha(self, senha):
+    def verifica_login_usuario_senha(self, senha) -> Tuple[bool, Usuario] | Tuple[bool, None]:
         for usuario in self._loja.get_usuarios():
             if usuario.get_senha() == senha:
                 return True, usuario
         return False, None
 
-    def verifica_login_adm(self, usuario, senha):
+    def verifica_login_adm(self, usuario: str, senha: str) -> bool:
         if self._adm_usuario == usuario and self._adm_senha == senha:
             return True
     
         return False
 
-    def finalizar_programa(self):
+    def finalizar_programa(self) -> None:
             print("Programa Finalizado")
             self._execucao = False
     
-    def input_str(self, text):
+    def input_str(self, text: str) -> str:
         while True:
             try:
                 return input(text)
             except:
                 print("*Valor não válido*")
 
-    def input_int(self, text):
+    def input_int(self, text: str) -> int:
         while True:
             try:
                 return int(input(text))
             except:
                 print("*Valor não válido*")
     
-    def get_sistema_adm(self):
-        return self._sistema_adm
-
-    def get_loja(self):
+    def get_loja(self) -> Loja:
         return self._loja
     
     

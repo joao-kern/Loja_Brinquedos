@@ -1,11 +1,16 @@
-from pedido import Pedido
+from typing import Callable, List
+from sistema.brinquedo import Brinquedo
+from sistema.loja import Loja
+from sistema.pedido import Pedido
+from sistema.usuario import Usuario
 
 class Sistema_Cliente:
-    def __init__(self, loja, usuario):
-        self._loja = loja
-        self._usuario = usuario
-        self._carrinho = []
-        self._operacoes = [
+    def __init__(self, loja: Loja, usuario: Usuario | None):
+        self._loja: Loja = loja
+        self._usuario: Usuario | None = usuario
+        self._carrinho: List[Brinquedo] = []
+        self._execucao: bool = False
+        self._operacoes: List[Callable] = [
             self.adicionar_brinquedo,
             self.itens_carrinho,
             self.finalizar_compra,
